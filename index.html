@@ -20,7 +20,7 @@ body {
 }
 
 header {
-  background: #fff;
+  background: white;
   padding: 18px 6%;
   display: flex;
   justify-content: space-between;
@@ -43,6 +43,7 @@ header {
   color: white;
   padding: 11px 16px;
   border-radius: 25px;
+  cursor: pointer;
 }
 
 .hero {
@@ -68,6 +69,7 @@ header {
   color: white;
   border: 0;
   border-radius: 25px;
+  cursor: pointer;
 }
 
 main {
@@ -101,11 +103,10 @@ h2 {
 }
 
 .photo {
-  height: 170px;
+  height: 190px;
   background: #eeece5;
   display: grid;
   place-items: center;
-  font-size: 65px;
   overflow: hidden;
 }
 
@@ -132,6 +133,7 @@ h2 {
   border: 0;
   padding: 10px 13px;
   border-radius: 20px;
+  cursor: pointer;
 }
 
 #cartPanel, #orderPanel {
@@ -146,6 +148,14 @@ h2 {
   line-height: 2;
 }
 
+.remove {
+  background: #eee;
+  border: 0;
+  padding: 5px 9px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .checkout, .submitBtn {
   background: #202020;
   color: white;
@@ -155,6 +165,7 @@ h2 {
   margin-top: 12px;
   width: 100%;
   font-size: 15px;
+  cursor: pointer;
 }
 
 #orderPanel {
@@ -177,15 +188,16 @@ h2 {
   font-size: 14px;
 }
 
-#orderPanel textarea {
-  resize: vertical;
-}
-
 .note {
   font-size: 13px;
   color: #777;
   line-height: 1.5;
   margin-top: 10px;
+}
+
+.empty {
+  padding: 20px 0;
+  color: #777;
 }
 
 footer {
@@ -206,6 +218,7 @@ footer {
 
 <header>
   <div class="logo">ZENVY.</div>
+
   <button class="cart" onclick="showCart()">
     🛒 Cart (<span id="count">0</span>)
   </button>
@@ -215,6 +228,7 @@ footer {
   <p>WELCOME TO ZENVY</p>
   <h1>Discover More. Shop Better.</h1>
   <p style="margin-top:15px">Find something you'll love.</p>
+
   <button onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">
     Explore Products →
   </button>
@@ -235,21 +249,26 @@ footer {
 
 <div id="cartPanel">
   <h2>Your Shopping Cart</h2>
-  <div id="cartItems">Your cart is empty.</div>
+
+  <div id="cartItems">
+    Your cart is empty.
+  </div>
+
   <strong id="total">Total: ₹0</strong>
-  <br>
+
   <button class="checkout" onclick="checkout()">
     Continue to Order
   </button>
 </div>
 
 <div id="orderPanel">
+
   <h2>Complete Your Order</h2>
 
   <form
     action="https://formsubmit.co/monjumabegum294@gmail.com"
     method="POST"
-    onsubmit="prepareOrder()"
+    onsubmit="return prepareOrder()"
   >
 
     <input type="hidden" name="_subject" value="New ZENVY Order">
@@ -288,7 +307,7 @@ footer {
     </button>
 
     <p class="note">
-      This form sends an order request. Payment and delivery
+      This is an order request. Payment and delivery
       arrangements will be confirmed separately.
     </p>
 
@@ -305,34 +324,80 @@ footer {
 <script>
 
 const products = [
-  {id:1, name:"Wireless Earphones", price:299, emoji:"🎧"},
-  {id:2, name:"Stylish Watch", price:399, emoji:"⌚"},
-  {id:3, name:"Phone Cover", price:149, emoji:"📱"},
-  {id:4, name:"Notebook Set", price:99, emoji:"📚"},
-  {id:5, name:"Home Decor", price:249, emoji:"🏠"},
-  {id:6, name:"Backpack", price:499, emoji:"🎒"},
-  {id:7, name:"Spider Hoodie", price:380, image:"{id:7, name:{"Spider Hoodie", price:749, image:"Spider.jpg.jpg"}
+  {
+    id: 1,
+    name: "Wireless Earphones",
+    price: 299,
+    emoji: "🎧",
+    image: "https://placehold.co/500x500?text=Earphones"
+  },
+  {
+    id: 2,
+    name: "Stylish Watch",
+    price: 399,
+    emoji: "⌚",
+    image: "https://placehold.co/500x500?text=Watch"
+  },
+  {
+    id: 3,
+    name: "Phone Cover",
+    price: 149,
+    emoji: "📱",
+    image: "https://placehold.co/500x500?text=Phone+Cover"
+  },
+  {
+    id: 4,
+    name: "Notebook Set",
+    price: 99,
+    emoji: "📚",
+    image: "https://placehold.co/500x500?text=Notebook"
+  },
+  {
+    id: 5,
+    name: "Home Decor",
+    price: 249,
+    emoji: "🏠",
+    image: "https://placehold.co/500x500?text=Home+Decor"
+  },
+  {
+    id: 6,
+    name: "Backpack",
+    price: 499,
+    emoji: "🎒",
+    image: "https://placehold.co/500x500?text=Backpack"
+  },
+  {
+    id: 7,
+    name: "Spider Hoodie",
+    price: 749,
+    emoji: "🕷️",
+    image: "Spider.jpg.jpg"
+  }
 ];
 
 let cart = [];
 
 function renderProducts() {
-  const search = document.getElementById("search").value.toLowerCase();
+
+  const search = document
+    .getElementById("search")
+    .value.toLowerCase();
 
   const filtered = products.filter(product =>
     product.name.toLowerCase().includes(search)
   );
 
   document.getElementById("products").innerHTML =
-    filtered.map(product => `
+    filtered.length
+    ? filtered.map(product => `
       <div class="product">
 
         <div class="photo">
-          ${
-            product.image
-            ? `<img src="${product.image}" alt="${product.name}">`
-            : product.emoji
-          }
+          <img
+            src="${product.image}"
+            alt="${product.name}"
+            onerror="this.style.display='none';this.parentElement.innerText='${product.emoji}'"
+          >
         </div>
 
         <h3>${product.name}</h3>
@@ -344,48 +409,66 @@ function renderProducts() {
         </button>
 
       </div>
-    `).join("");
+    `).join("")
+    : '<p class="empty">No products found.</p>';
 }
 
 function addToCart(id) {
+
   const product = products.find(p => p.id === id);
-  cart.push(product);
-  updateCart();
+
+  if (product) {
+    cart.push(product);
+    updateCart();
+  }
 }
 
 function removeFromCart(index) {
+
   cart.splice(index, 1);
   updateCart();
 }
 
 function updateCart() {
+
   document.getElementById("count").innerText = cart.length;
 
   if (cart.length === 0) {
-    document.getElementById("cartItems").innerText =
+
+    document.getElementById("cartItems").innerHTML =
       "Your cart is empty.";
+
   } else {
+
     document.getElementById("cartItems").innerHTML =
       cart.map((item, index) => `
-        ${item.name} - ₹${item.price}
-        <button onclick="removeFromCart(${index})">Remove</button>
-        <br>
+        <div>
+          ${item.name} - ₹${item.price}
+          <button class="remove"
+            onclick="removeFromCart(${index})">
+            Remove
+          </button>
+        </div>
       `).join("");
   }
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price, 0
+  );
 
   document.getElementById("total").innerText =
     "Total: ₹" + total;
 }
 
 function showCart() {
+
   document.getElementById("cartPanel").scrollIntoView({
     behavior: "smooth"
   });
 }
 
 function checkout() {
+
   if (cart.length === 0) {
     alert("Please add a product to your cart first.");
     return;
@@ -399,14 +482,26 @@ function checkout() {
 }
 
 function prepareOrder() {
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
+
+  if (cart.length === 0) {
+    alert("Your cart is empty!");
+    return false;
+  }
+
+  const total = cart.reduce(
+    (sum, item) => sum + item.price, 0
+  );
 
   const details = cart.map(item =>
     item.name + " - ₹" + item.price
   ).join("\n");
 
   document.getElementById("orderDetails").value = details;
-  document.getElementById("orderTotal").value = "₹" + total;
+
+  document.getElementById("orderTotal").value =
+    "₹" + total;
+
+  return true;
 }
 
 renderProducts();
@@ -416,4 +511,3 @@ updateCart();
 
 </body>
 </html>
-mm
