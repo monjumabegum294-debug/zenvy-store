@@ -307,11 +307,11 @@ footer {
 const products = [
   {id:1, name:"Wireless Earphones", price:299, emoji:"🎧"},
   {id:2, name:"Stylish Watch", price:399, emoji:"⌚"},
-  {id:3, name:"Phone Cover", price:239, emoji:"📱"},
-  {id:4, name:"Notebook Set", price:149, emoji:"📚"},
+  {id:3, name:"Phone Cover", price:149, emoji:"📱"},
+  {id:4, name:"Notebook Set", price:99, emoji:"📚"},
   {id:5, name:"Home Decor", price:249, emoji:"🏠"},
   {id:6, name:"Backpack", price:499, emoji:"🎒"},
-  {id:7, name:"Spider Hoodie", price:799, emoji:"❤️‍🩹"
+  {id:7, name:"Spider Hoodie", price:380, image:"Spider.jpg"}
 ];
 
 let cart = [];
@@ -402,7 +402,8 @@ function prepareOrder() {
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   const details = cart.map(item =>
-    item.name + " - ₹" + item.price.).join("\n");
+    item.name + " - ₹" + item.price
+  ).join("\n");
 
   document.getElementById("orderDetails").value = details;
   document.getElementById("orderTotal").value = "₹" + total;
@@ -415,3 +416,4 @@ updateCart();
 
 </body>
 </html>
+mm
