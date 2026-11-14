@@ -402,8 +402,7 @@ function prepareOrder() {
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   const details = cart.map(item =>
-    item.name + " - ₹" + item.price
-  ).join("\n");
+    item.name + " - ₹" + item.price.).join("\n");
 
   document.getElementById("orderDetails").value = details;
   document.getElementById("orderTotal").value = "₹" + total;
