@@ -1,0 +1,99 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZENVY | Online Shopping</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f8f8f6;color:#222}
+header{background:white;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:28px;font-weight:bold;letter-spacing:3px}
+button{cursor:pointer;border:0;border-radius:25px;padding:12px 18px;background:#222;color:white}
+.hero{padding:55px 25px;background:#e8e9df}
+.hero p{margin-bottom:12px;color:#666}
+.hero h1{font-size:42px;max-width:400px}
+.hero button{margin-top:20px}
+main{padding:25px 18px}
+.search{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:20px 0}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.product{background:white;border-radius:15px;overflow:hidden;padding-bottom:15px}
+.photo{height:130px;background:#eeece5;display:grid;place-items:center;font-size:55px}
+.product h3{font-size:15px;margin:12px 10px}
+.price{font-weight:bold;margin:10px}
+.product button{margin-left:10px;padding:10px}
+#cart{background:white;padding:20px;margin-top:25px;border-radius:15px}
+footer{text-align:center;padding:35px;color:#777}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">ZENVY.</div>
+<button onclick="document.getElementById('cart').scrollIntoView()">🛒 Cart (<span id="count">0</span>)</button>
+</header>
+
+<section class="hero">
+<p>WELCOME TO ZENVY</p>
+<h1>Discover More. Shop Better.</h1>
+<p style="margin-top:15px">Find something you'll love.</p>
+<button onclick="document.getElementById('shop').scrollIntoView()">Explore Products →</button>
+</section>
+
+<main id="shop">
+<h2>Our Collection</h2>
+<input class="search" id="search" placeholder="Search products..." oninput="render()">
+<div class="products" id="products"></div>
+
+<div id="cart">
+<h2>Your Cart</h2>
+<div id="items">Your cart is empty.</div>
+<h3 id="total">Total: ₹0</h3>
+<button onclick="order()">Place Order</button>
+</div>
+</main>
+
+<footer>
+<h2>ZENVY.</h2>
+<p>Discover More. Shop Better.</p>
+<p>© 2026 ZENVY</p>
+</footer>
+
+<script>
+const products=[
+{id:1,name:"Wireless Earphones",price:299,emoji:"🎧"},
+{id:2,name:"Stylish Watch",price:399,emoji:"⌚"},
+{id:3,name:"Phone Cover",price:149,emoji:"📱"},
+{id:4,name:"Notebook Set",price:99,emoji:"📚"},
+{id:5,name:"Home Decor",price:249,emoji:"🏠"},
+{id:6,name:"Backpack",price:499,emoji:"🎒"}
+];
+let cart=[];
+
+function render(){
+let q=document.getElementById("search").value.toLowerCase();
+document.getElementById("products").innerHTML=products.filter(p=>p.name.toLowerCase().includes(q)).map(p=>`
+<div class="product">
+<div class="photo">${p.emoji}</div>
+<h3>${p.name}</h3>
+<div class="price">₹${p.price}</div>
+<button onclick="add(${p.id})">Add to Cart +</button>
+</div>`).join("");
+}
+function add(id){cart.push(products.find(p=>p.id===id));update()}
+function update(){
+document.getElementById("count").textContent=cart.length;
+document.getElementById("items").innerHTML=cart.length?cart.map((p,i)=>`${p.name} ₹${p.price} <button onclick="removeItem(${i})">Remove</button>`).join("<br>"):"Your cart is empty.";
+document.getElementById("total").textContent="Total: ₹"+cart.reduce((a,p)=>a+p.price,0);
+}
+function removeItem(i){cart.splice(i,1);update()}
+function order(){
+if(!cart.length){alert("Please add a product first!");return}
+let summary=cart.map(p=>p.name+" ₹"+p.price).join(", ");
+alert("Your selected products: "+summary+". Contact the shop to confirm your order. Online ordering will be connected next.");
+}
+render();
+</script>
+</body>
+</html>
